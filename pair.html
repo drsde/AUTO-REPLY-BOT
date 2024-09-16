@@ -3,213 +3,314 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pair Code</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>VenoCyber MD Pairing Code</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    :root {
+      --primary-color: #5935ac;
+      --secondary-color: #c01736;
+      --text-color: #e9e4e4;
+      --bg-color: #121212;
+      --box-shadow: 0 0 20px rgba(250, 249, 249, 0.2);
+    }
+
     body {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      background: black;
-      font-family: Arial, sans-serif;
+      background: var(--bg-color);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
     }
 
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      max-width: 400px;
+      width: 100%;
+      padding: 2rem;
     }
 
     .box {
-      width: 300px;
-      height: 320px;
-      padding: 20px;
-      position: relative;
-      text-align: center;
-      background-color: rgb(0, 0, 0);
-      border-radius: 10px;
-      transform: perspective(1000px) rotateY(0deg);
-      box-shadow: 0 0 20px rgba(250, 249, 249, 0.7);
-      position: relative;
+      width: 100%;
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: var(--box-shadow);
+      backdrop-filter: blur(10px);
+      transform-style: preserve-3d;
+      transition: all 0.5s ease;
     }
 
-    #text {
-      color: #f6f5f5;
+    .box:hover {
+      transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+      box-shadow: 0 15px 30px rgba(250, 249, 249, 0.3);
     }
 
-    .input-container input {
-      color: #f1eaea;
+    h3, h6 {
+      color: var(--text-color);
+      margin: 0.5rem 0;
     }
 
-    .centered-text {
-      color: #e9e4e4;
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    h6 {
+      font-weight: 400;
+      opacity: 0.8;
     }
 
     .input-container {
       display: flex;
-      background: rgb(10, 10, 10);
-      border-radius: 1rem;
-      background: black;
-      box-shadow: black;
-      padding: 0.3rem;
-      gap: 0.3rem;
-      max-width: 300px;
-      width: 100%;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
     }
 
     .input-container input {
-      border-radius: 0.8rem 0 0 0.8rem;
-      background: #e8e8e8;
-      box-shadow: inset 13px 13px 10px #dcdcdc, inset -13px -13px 10px #f4f4f4;
-      width: 100%;
-      flex-basis: 75%;
       padding: 1rem;
       border: none;
-      border-left: 2px solid #ecf2f8;
-      color: #000000;
-      transition: all 0.2s ease-in-out;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: all 0.3s ease;
     }
 
     .input-container input:focus {
-      border-left: 2px solid #ecf1f6;
       outline: none;
-      box-shadow: inset 13px 13px 10px #f0f2f3, inset -13px -13px 10px #f4f4f4;
+      box-shadow: 0 0 0 2px var(--primary-color);
     }
 
     .input-container button {
-      flex-basis: 15%;
       padding: 1rem;
-      background: #5935ac;
-      font-weight: 700;
-      letter-spacing: 0.3rem;
-      text-transform: uppercase;
-      color: white;
       border: none;
-      width: 90%;
-      border-radius: 0 1rem 1rem 0;
-      transition: all 0.2s ease-in-out;
+      border-radius: 10px;
+      background: var(--primary-color);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .input-container button:hover {
-      background: linear-gradient(135deg, #c01736 0%, #8b17b6 100%);
+      background: var(--secondary-color);
+      transform: translateY(-2px);
     }
 
-    @media (max-width: 500px) {
-      .input-container {
-        flex-direction: column;
-      }
-
-      .input-container input {
-        border-radius: 0.8rem;
-      }
-
-      .input-container button {
-        padding: 0.4rem;
-        border-radius: 0.8rem;
-      }
-    }
-
-    .centered-text {
+    #waiting-message, #pair {
+      margin-top: 1rem;
+      color: var(--text-color);
+      font-weight: 500;
       text-align: center;
     }
 
-    @media (max-width: 500px) {
-      .box {
-        width: 90%; 
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(45deg, #121212, #1a1a1a, #222222);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
       }
     }
 
-    @media (max-width: 500px) {
-      .input-container input {
-        border-radius: 0.8rem;
-        width: 80%; 
-      }
+    .floating-icons {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
 
-      .input-container button {
+    .floating-icon {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.1);
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    #copy {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #copy:hover {
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    @media (max-width: 500px) {
+      .container {
         padding: 1rem;
-        border-radius: 0.9rem;
-        width: 100%; 
+      }
+      
+      .box {
+        padding: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
+  <div class="animated-background"></div>
+  <div class="floating-icons">
+    <i class="floating-icon fas fa-code"></i>
+    <i class="floating-icon fas fa-mobile-alt"></i>
+    <i class="floating-icon fas fa-wifi"></i>
+    <i class="floating-icon fas fa-lock"></i>
+    <i class="floating-icon fas fa-user-shield"></i>
+  </div>
   <div class="container">
-    <div class="main">
-      <div class="box" id="box">
-        <div id="text">
-          <i class="fa fa-user"></i>
-          <p>
-            <h3 class="centered-text">VENOCYBER MD PAIRING CODE</h3>
-            <br>
-            <h6>Made By Venocyber tech🔥🥳.</h6>
-            <h6>Enter Your Number with Country Code.</h6>
-            <div class="input-container">
-              <input placeholder="255698101xxx" type="number" id="number" placeholder="Enter your Phone Pumber with Cuntry Code" name="">
-              <button id="submit">Submit</button>
-            </div>
-            
-            <a id="waiting-message" class="centered-text" style="display: none;">Please wait a while</a>
-            <br>
-            <br>
-            <main id="pair"></main>
-          </p>
-        </div>
+    <div class="box" id="box">
+      <h3>DEXTER ID KEY</h3>
+      <h6>Made By DEXTER 🔥🥳</h6>
+      <h6>Enter Your Number with Country Code</h6>
+      <div class="input-container">
+        <input type="tel" id="number" placeholder="e.g., +255698101xxx" name="phone">
+        <button id="submit">Generate Code</button>
       </div>
+      <div id="waiting-message" style="display: none;">Please wait a moment...</div>
+      <div id="pair"></div>
     </div>
   </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
   <script>
-    let a = document.getElementById("pair");
-    let b = document.getElementById("submit");
-    let c = document.getElementById("number");
-    let box = document.getElementById("box");
+    const pairElement = document.getElementById("pair");
+    const submitButton = document.getElementById("submit");
+    const numberInput = document.getElementById("number");
+    const box = document.getElementById("box");
+    const waitingMessage = document.getElementById("waiting-message");
 
-    async function Copy() {
-      let text = document.getElementById("copy").innerText;
-      let obj = document.getElementById("copy");
-      await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
-      obj.innerText = "COPIED";
-      obj.style = "color:blue;font-weight:bold";
-      obj.size = "5";
-      setTimeout(() => {
-        obj.innerText = text;
-        obj.style = "color:white;font-weight-bold";
-        obj.size = "5";
-      }, 500);
+    function createFloatingIcons() {
+      const icons = document.querySelectorAll('.floating-icon');
+      icons.forEach(icon => {
+        icon.style.left = `${Math.random() * 100}vw`;
+        icon.style.animationDuration = `${Math.random() * 10 + 10}s`;
+        icon.style.fontSize = `${Math.random() * 20 + 10}px`;
+      });
     }
 
-    b.addEventListener("click", async (e) => {
-      e.preventDefault();
-      if (!c.value) {
-        a.innerHTML = '<a style="color:white;font-weight:bold">Enter your WhatsApp number with Country Code</a><br><br>';
-      } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
-        a.innerHTML = '<a style="color:red;font-weight:bold">Invalid Number</a><br><br>';
-      } else {
-        const Venocyber_Tech = c.value.replace(/[^0-9]/g, "");
-        let bb = "";
-        let bbc = "";
-        const cc = Venocyber_Tech.split('');
-        cc.map(a => {
-          bbc += a;
-          if (bbc.length == 3) {
-            bb += " " + a;
-          } else if (bbc.length == 8) {
-            bb += " " + a;
-          } else {
-            bb += a;
-          }
-        });
-        c.type = "text";
-        c.value = "+" + bb;
-        c.style = "color:black;font-size:20px";
-        a.innerHTML = '<a style="color:white;font-weight:bold">Please Wait...</a><br><br>';
-        let { data } = await axios(`/code?number=${Venocyber_Tech}`);
-        let code = data.code || "Service Unavailable";
-        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">CODE: <span style="color:white;font-weight:bold">' + code + '</span></font><br><br><br>';
+    createFloatingIcons();
+
+    async function copyToClipboard() {
+      const codeElement = document.getElementById("copy");
+      if (!codeElement) return;
+
+      const code = codeElement.innerText.replace('CODE: ', '');
+      await navigator.clipboard.writeText(code);
+      
+      const originalText = codeElement.innerHTML;
+      codeElement.innerHTML = "COPIED!";
+      codeElement.style.color = "#4CAF50";
+      
+      setTimeout(() => {
+        codeElement.innerHTML = originalText;
+        codeElement.style.color = "";
+      }, 1500);
+    }
+
+    function formatPhoneNumber(value) {
+      const number = value.replace(/\D/g, '');
+      const match = number.match(/^(\d{1,3})(\d{0,3})(\d{0,3})(\d{0,4})$/);
+      if (match) {
+        let formatted = '';
+        if (match[1]) formatted += '+' + match[1];
+        if (match[2]) formatted += ' ' + match[2];
+        if (match[3]) formatted += ' ' + match[3];
+        if (match[4]) formatted += ' ' + match[4];
+        return formatted.trim();
       }
+      return value;
+    }
+
+    numberInput.addEventListener('input', (e) => {
+      e.target.value = formatPhoneNumber(e.target.value);
+    });
+
+    submitButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const phoneNumber = numberInput.value.replace(/\D/g, '');
+
+      if (!phoneNumber) {
+        showMessage('Please enter your WhatsApp number with country code.', 'warning');
+      } else if (phoneNumber.length < 10) {
+        showMessage('Invalid phone number. Please check and try again.', 'error');
+      } else {
+        waitingMessage.style.display = 'block';
+        pairElement.innerHTML = '';
+        submitButton.disabled = true;
+
+        try {
+          const { data } = await axios(`/code?number=${phoneNumber}`);
+          const code = data.code || "Service Unavailable";
+          showMessage(`<span id="copy" onclick="copyToClipboard()">CODE: <span style="color: #4CAF50;">${code}</span></span>`, 'success');
+        } catch (error) {
+          showMessage('An error occurred. Please try again later.', 'error');
+        } finally {
+          waitingMessage.style.display = 'none';
+          submitButton.disabled = false;
+        }
+      }
+    });
+
+    function showMessage(message, type) {
+      pairElement.innerHTML = `<div class="message ${type}">${message}</div>`;
+      pairElement.style.opacity = '0';
+      setTimeout(() => {
+        pairElement.style.transition = 'opacity 0.5s ease-in-out';
+        pairElement.style.opacity = '1';
+      }, 10);
+    }
+
+    // Add 3D effect to the box
+    document.addEventListener('mousemove', (e) => {
+      const { clientX, clientY } = e;
+      const { offsetWidth, offsetHeight } = box;
+      const { left, top } = box.getBoundingClientRect();
+      
+      const x = (clientX - left - offsetWidth / 2) / 25;
+      const y = -(clientY - top - offsetHeight / 2) / 25;
+      
+      box.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+
+    box.addEventListener('mouseleave', () => {
+      box.style.transform = 'rotateY(0deg) rotateX(0deg)';
     });
   </script>
 </body>
